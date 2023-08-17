@@ -2,7 +2,7 @@
 function Products({product}) {
 
   return (
-    <div className="w-60 my-5 flex max-w-xs flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-2xl">
+    <div className="w-60 flex max-w-xs flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-2xl">
       <div
         className=" mx-2 mt-3 flex h-52 w-56  overflow-hidden rounded-xl "
         href="#">

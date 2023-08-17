@@ -3,6 +3,7 @@ import ProductCard from "../ProductCard/ProductCard";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import Pagination from "../Pagination/Pagination";
+import { useSelector } from "react-redux";
 
 function Home() {
   const [modal, setmodal] = useState(false);
@@ -15,17 +16,25 @@ function Home() {
 
   const [totalProduct, setTotalProduct] = useState(0);
   const [activePage, setActivePage] = useState(1);
-  
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sortOrder, setSortOrder] = useState(null);
+
+  const authorized = useSelector((state) => state.user.authorized);
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/product",{params: {page:activePage}}).then(({ data }) => {
-      setAllProducts(data.products);
-      setTotalProduct(data.totalProducts);
-    });
-  }, [modal,activePage]);
+    axios
+      .get("http://localhost:4000/api/product", {
+        params: { page: activePage, category: selectedCategory,priceSortOrder:sortOrder },
+      })
+      .then(({ data }) => {
+        setAllProducts(data.products);
+        setTotalProduct(data.totalProducts);
+      });
+  }, [modal, activePage, selectedCategory,sortOrder]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!authorized) return toast.error("Please Login to add products");
     const newErrors = {};
 
     if (!productName.trim()) {
@@ -68,19 +77,89 @@ function Home() {
       setErrors(newErrors);
     }
   };
+  const categoryData = ["shoes", "tws", "phones", "tv"];
   return (
-    <div className="mx-14 my-28">
+    <div className="mx-16 my-24">
       <button
         onClick={() => setmodal(true)}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Add Product
       </button>
+      <div className="mt-2">
+        <button
+          onClick={() => {
+            setSelectedCategory(null);
+          }}
+          className={`px-5 py-2 rounded-xl ${
+            selectedCategory === null
+              ? "bg-[#232946] text-white"
+              : " bg-[#ffffff]"
+          } m-5 shadow-md shadow-gray-500 border-t-2`}>
+          All
+        </button>
+        {categoryData.map((category, index) => {
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                setSelectedCategory(category);
+              }}
+              className={`px-5 py-2 rounded-xl ${
+                selectedCategory === category
+                  ? "bg-[#232946] text-white"
+                  : "bg-[#ffffff]"
+              } m-5 shadow-md shadow-gray-500 border-t-2`}>
+              {category}
+            </button>
+          );
+        })}
+      </div>
+      <div>
+        <p className="mx-5 text-lg mt-2">Price</p>
+        <div className="flex items-center  my-2 mx-5">
+          <input
+            id="default-radio-1"
+            type="radio"
+            value=""
+            checked={sortOrder === 1}
+            onChange={() => setSortOrder(1)}
+            name="default-radio"
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+          />
+          <label
+            htmlFor="default-radio-1"
+            className="ml-2 text-sm font-medium text-gray-900 ">
+            Low to high
+          </label>
+        </div>
+        <div className="flex items-center  my-2 mx-5">
+          <input
+            id="default-radio-1"
+            type="radio"
+            value=""
+            checked={sortOrder === -1}
+            onChange={() => setSortOrder(-1)}
+            name="default-radio"
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+          />
+          <label
+            htmlFor="default-radio-1"
+            className="ml-2 text-sm font-medium text-gray-900 ">
+            high to low
+          </label>
+        </div>
+      </div>
       <div className="gap-5 grid  sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
         {allProducts.map((product, index) => (
           <ProductCard key={index} product={product} />
         ))}
       </div>
-      <Pagination  activePage={activePage} setActivePage={setActivePage} limit={4} totalProduct={totalProduct}/>
+      <Pagination
+        activePage={activePage}
+        setActivePage={setActivePage}
+        limit={4}
+        totalProduct={totalProduct}
+      />
       {modal && (
         <div className="fixed inset-0  bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
           <div className="relative flex flex-col items-center bg-gray-50 ">
