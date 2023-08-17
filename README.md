@@ -1,7 +1,7 @@
 
 # User Management
 
-This project is a User Management System that handles user registration, authentication, and data retrieval on the backend. The frontend offers an elegant interface with forms, dashboards, and data presentation, all while maintaining security and responsiveness.
+This project is a User Management System that handles user registration, authentication, and Product data retrieval on the backend. The frontend offers an elegant interface with forms, and data presentation, all while maintaining security and responsiveness.
 
 ## Features
 
@@ -9,8 +9,8 @@ User Registration and Authentication:
 - API endpoints for user registration and implemented JWT-based authentication for secure user login.
 
 Data Retrieval and Filtering:
-- Developed API endpoints to retrieve data from the database.
-  Implemented filtering, sorting, and pagination options for efficient data manipulation.
+- Developed API endpoints to retrieve Product data from the database.
+  Implemented  pagination options for efficient data manipulation.
 
 Error Handling Middleware:
 - error handling middleware to manage and send appropriate error responses to clients.
@@ -54,7 +54,7 @@ JWT\_SECRET: The secret key for JSON Web Token (JWT) encryption and decryption.
 Install user-management with npm
 
 ```bash
-cd User-Management
+cd User-Authentication
   cd client
     npm install
   cd server
@@ -72,7 +72,7 @@ Clone the project
 Go to the project frontend directory
 
 ```bash
-  cd assignment
+  cd User-Authentication
     cd client
 ```
 
@@ -92,7 +92,7 @@ Start the server
 Go to the project backend directory
 
 ```bash
-  cd Assignment
+  cd User-Authentication
     cd server
 ```
 

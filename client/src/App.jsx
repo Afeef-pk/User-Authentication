@@ -1,10 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Toaster } from "react-hot-toast";
 import Home from "./pages/HomePage";
 import Signup from "./pages/SignupPage";
 import Login from "./pages/LoginPage";
-import { Toaster } from "react-hot-toast";
 import UserProfile from "./pages/UserProfile";
+
 function App() {
+  const authorized = useSelector((state) => state.user.authorized);
+
   return (
     <>
       <Toaster />
@@ -13,7 +17,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
-          <Route path="profile" element={<UserProfile/>} />
+          {authorized ? (
+            <Route path="profile" element={<UserProfile />} />
+          ) : (
+            <Route path="profile" element={<Login />} />
+          )}
         </Routes>
       </BrowserRouter>
     </>
